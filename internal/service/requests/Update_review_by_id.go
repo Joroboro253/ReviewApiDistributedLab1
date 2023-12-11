@@ -1,7 +1,7 @@
 package requests
 
 import (
-	"ReviewInterfaceAPI/internal/models"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
 	"github.com/Masterminds/squirrel"
 )
 

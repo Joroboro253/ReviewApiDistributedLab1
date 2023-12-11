@@ -1,20 +1,11 @@
 package requests
 
 import (
-	"ReviewInterfaceAPI/internal/models"
 	"fmt"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
 	"github.com/Masterminds/squirrel"
-	"github.com/jmoiron/sqlx"
 	"log"
 )
-
-type ReviewService struct {
-	DB *sqlx.DB
-}
-
-func NewReviewService(db *sqlx.DB) *ReviewService {
-	return &ReviewService{DB: db}
-}
 
 func (s *ReviewService) CreateReview(review *models.Review) (int, error) {
 	builder := squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar)

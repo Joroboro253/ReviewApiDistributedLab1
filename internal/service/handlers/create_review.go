@@ -1,13 +1,10 @@
 package handlers
 
 import (
-	"ReviewInterfaceAPI/internal/models"
-	"ReviewInterfaceAPI/internal/service/requests"
-
-	//"ReviewInterfaceAPI/internal/models"
-	"ReviewInterfaceAPI/internal/service"
-	"ReviewInterfaceAPI/internal/service/helpers"
 	"encoding/json"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
+	helpers "github.com/Joroboro253/ReviewApiDistributedLab/internal/service/heplers"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/requests"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 	"log"
@@ -21,7 +18,7 @@ type RequestBody struct {
 }
 
 type CreateHandler struct {
-	Service *service.ReviewService
+	Service *requests.ReviewService
 }
 
 func (h *Handler) CreateReview(w http.ResponseWriter, r *http.Request) {
@@ -53,9 +50,9 @@ func (h *Handler) CreateReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reviewService := service.NewReviewService(h.DB)
+	reviewService := requests.NewReviewService(h.DB)
 	//reviewID, err := reviewService.CreateReview(&review)
-	reviewID, err := requests.CreateReview(&review)
+	reviewID, err := reviewService.CreateReview(&review)
 	if err != nil {
 		log.Printf("Error inserting review into database: %v", err)
 		helpers.SendApiError(w, models.ErrDatabaseProblem)
@@ -64,8 +61,8 @@ func (h *Handler) CreateReview(w http.ResponseWriter, r *http.Request) {
 	review.ID = reviewID
 
 	// Query generation
-	respBody := ResponseBody{
-		Data: ResponseData{
+	respBody := models.ResponseBody{
+		Data: models.ResponseData{
 			Type:       "review",
 			ID:         review.ID,
 			Attributes: review,

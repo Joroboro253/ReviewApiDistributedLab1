@@ -1,16 +1,16 @@
 package handlers
 
 import (
-	"ReviewInterfaceAPI/internal/models"
-	"ReviewInterfaceAPI/internal/service"
-	"ReviewInterfaceAPI/internal/service/helpers"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
+	helpers "github.com/Joroboro253/ReviewApiDistributedLab/internal/service/heplers"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/requests"
 	"github.com/go-chi/chi/v5"
 	"net/http"
 	"strconv"
 )
 
 type DeleteHandler struct {
-	Service *service.ReviewService
+	Service *requests.ReviewService
 }
 
 func (h *Handler) DeleteReviews(w http.ResponseWriter, r *http.Request) {
@@ -19,7 +19,7 @@ func (h *Handler) DeleteReviews(w http.ResponseWriter, r *http.Request) {
 		helpers.SendApiError(w, models.ErrInvalidInput)
 		return
 	}
-	reviewService := service.NewReviewService(h.DB)
+	reviewService := requests.NewReviewService(h.DB)
 	err = reviewService.DeleteReviewsByProductID(productID)
 	if err != nil {
 		helpers.SendApiError(w, models.ErrDatabaseProblem)

@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"ReviewInterfaceAPI/internal/models"
-	"ReviewInterfaceAPI/internal/service"
-	"ReviewInterfaceAPI/internal/service/helpers"
 	"encoding/json"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
+	helpers "github.com/Joroboro253/ReviewApiDistributedLab/internal/service/heplers"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/requests"
 	"github.com/go-chi/chi/v5"
 	"log"
 	"net/http"
@@ -12,7 +12,7 @@ import (
 )
 
 type GetHandler struct {
-	Service *service.ReviewService
+	Service *requests.ReviewService
 }
 
 func (h *Handler) GetReviews(w http.ResponseWriter, r *http.Request) {
@@ -39,7 +39,7 @@ func (h *Handler) GetReviews(w http.ResponseWriter, r *http.Request) {
 		limit = 10 // default value
 	}
 
-	reviewService := service.NewReviewService(h.DB)
+	reviewService := requests.NewReviewService(h.DB)
 	reviews, totalReviews, totalPages, err := reviewService.GetReviewsByProductID(productID, sortField, page, limit)
 	if err != nil {
 		helpers.SendApiError(w, models.ErrDatabaseProblem)

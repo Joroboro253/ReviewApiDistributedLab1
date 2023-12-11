@@ -1,13 +1,13 @@
 package handlers
 
 import (
-	"ReviewInterfaceAPI/internal/models"
-	"ReviewInterfaceAPI/internal/service"
-	"ReviewInterfaceAPI/internal/service/helpers"
 	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
+	helpers "github.com/Joroboro253/ReviewApiDistributedLab/internal/service/heplers"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/requests"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 	"net/http"
@@ -15,7 +15,7 @@ import (
 )
 
 type UpdateHandler struct {
-	Service *service.ReviewService
+	Service *requests.ReviewService
 }
 
 func (h *Handler) UpdateReviewById(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +43,7 @@ func (h *Handler) UpdateReviewById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reviewService := service.NewReviewService(h.DB)
+	reviewService := requests.NewReviewService(h.DB)
 	updatedReviewID, err := reviewService.UpdateReview(productId, reviewID, updateData)
 
 	if err != nil {
@@ -55,7 +55,7 @@ func (h *Handler) UpdateReviewById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	successResp := SuccessResponse{}
+	successResp := models.SuccessResponse{}
 	successResp.Data.Type = "review"
 	successResp.Data.ID = updatedReviewID
 	successResp.Data.Attributes = map[string]interface{}{

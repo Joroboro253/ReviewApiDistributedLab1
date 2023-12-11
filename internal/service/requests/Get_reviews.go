@@ -1,8 +1,8 @@
 package requests
 
 import (
-	"ReviewInterfaceAPI/internal/models"
 	"fmt"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
 	"github.com/Masterminds/squirrel"
 	"log"
 	"math"

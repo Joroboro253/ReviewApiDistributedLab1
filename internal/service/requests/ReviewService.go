@@ -1,4 +1,4 @@
-package service
+package requests
 
 import "github.com/jmoiron/sqlx"
 
