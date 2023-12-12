@@ -14,9 +14,6 @@ func (s *ReviewService) UpdateReview(productId, reviewId int, updateData models.
 	if updateData.UserID != nil {
 		builder = builder.Set("user_id", *updateData.UserID)
 	}
-	if updateData.Rating != nil {
-		builder = builder.Set("rating", *updateData.Rating)
-	}
 	if updateData.Content != nil {
 		builder = builder.Set("content", *updateData.Content)
 	}

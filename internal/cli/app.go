@@ -1,4 +1,4 @@
-package ReviewApiDistributedLab
+package cli
 
 import (
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/handlers"
@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// Delete App later
 type App struct {
 	Router *chi.Mux
 	DB     *sqlx.DB

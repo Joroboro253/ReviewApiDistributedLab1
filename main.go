@@ -1,6 +1,7 @@
-package ReviewApiDistributedLab
+package main
 
 import (
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/cli"
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/repository"
 	"log"
 )
@@ -12,7 +13,7 @@ func main() {
 		Port:     "5432",
 		Username: "postgres",
 		Password: "bestuser",
-		DBName:   "ProductReviewsDB",
+		DBName:   "reviewApi",
 	}
 	// Connect to DB
 	var err error
@@ -22,7 +23,7 @@ func main() {
 	}
 	defer db.Close()
 	// connection test
-	app := NewApp(db)
+	app := cli.NewApp(db)
 	err = app.Start(":3000")
 	if err != nil {
 		log.Fatalf("failed to start the server: %v", err)

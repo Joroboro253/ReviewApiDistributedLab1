@@ -13,10 +13,6 @@ import (
 	"time"
 )
 
-type RequestBody struct {
-	Data models.ReviewData `json:"data"`
-}
-
 type CreateHandler struct {
 	Service *requests.ReviewService
 }
@@ -29,7 +25,7 @@ func (h *Handler) CreateReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Decoding
-	var reqBody RequestBody
+	var reqBody models.RequestBody
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		helpers.SendApiError(w, models.ErrInvalidInput)
 		return

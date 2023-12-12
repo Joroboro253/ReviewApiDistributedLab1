@@ -11,8 +11,8 @@ func (s *ReviewService) CreateReview(review *models.Review) (int, error) {
 	builder := squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar)
 
 	query, args, err := builder.Insert("reviews").
-		Columns("product_id", "user_id", "rating", "content", "created_at", "updated_at").
-		Values(review.ProductID, review.UserID, review.Rating, review.Content, review.CreatedAt, review.UpdatedAt).
+		Columns("product_id", "user_id", "content", "created_at", "updated_at").
+		Values(review.ProductID, review.UserID, review.Content, review.CreatedAt, review.UpdatedAt).
 		Suffix("RETURNING id").
 		ToSql()
 	log.Printf("Executing SQL query: %s with args: %v", query, args)
