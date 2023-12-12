@@ -2,27 +2,24 @@ package main
 
 import (
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/cli"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/config"
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/repository"
 	"log"
 )
 
 func main() {
-	//Configuration
-	cfg := repository.Config{
-		Host:     "localhost",
-		Port:     "5432",
-		Username: "postgres",
-		Password: "bestuser",
-		DBName:   "reviewApi",
-	}
-	// Connect to DB
-	var err error
-	db, err := repository.NewPostgresDB(cfg)
+	cfg, err := config.ReadConfig("config.yaml")
 	if err != nil {
-		log.Fatalf("failed to initialize db: %v", err)
+		log.Fatalf("Error reading config: %v", err)
+	}
+
+	db, err := repository.NewPostgresDB(cfg.DB.URL)
+	if err != nil {
+		log.Fatalf("Failed to initialize db: %v", err)
 	}
 	defer db.Close()
-	// connection test
+
+	// Initialization and starting application
 	app := cli.NewApp(db)
 	err = app.Start(":3000")
 	if err != nil {
