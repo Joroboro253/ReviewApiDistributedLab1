@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
-	helpers "github.com/Joroboro253/ReviewApiDistributedLab/internal/service/heplers"
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/requests"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
@@ -18,29 +17,25 @@ type UpdateHandler struct {
 	Service *requests.ReviewService
 }
 
-func (h *Handler) UpdateReviewById(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) UpdateReviewById(w http.ResponseWriter, r *http.Request) *models.APIError {
 	productId, err := strconv.Atoi(chi.URLParam(r, "product_id"))
 	if err != nil {
-		helpers.SendApiError(w, models.ErrInvalidInput)
-		return
+		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", "Wrong format product_id")
 	}
 	reviewID, err := strconv.Atoi(chi.URLParam(r, "review_id"))
 	if err != nil {
-		helpers.SendApiError(w, models.ErrInvalidInput)
-		return
+		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", "Error during JSON decoding")
 	}
 	// Decoding
 	var req models.ReviewUpdateRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		helpers.SendApiError(w, models.ErrInvalidInput)
-		return
+		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", "Error during JSON decoding")
 	}
 	// Validation
 	updateData := req.Data.Attributes
 	validate := validator.New()
 	if err := validate.Struct(updateData); err != nil {
-		helpers.SendApiError(w, models.ErrInvalidInput)
-		return
+		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", "Data validation error")
 	}
 
 	reviewService := requests.NewReviewService(h.DB)
@@ -48,11 +43,10 @@ func (h *Handler) UpdateReviewById(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			helpers.SendApiError(w, models.ErrReviewNotFound)
-			return
+			return models.NewAPIError(http.StatusNotFound, "StatusNotFound", "Object not found")
 		}
-		helpers.SendApiError(w, models.ErrDatabaseProblem)
-		return
+		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", "Error inserting revocation into database")
+
 	}
 
 	successResp := models.SuccessResponse{}
@@ -65,4 +59,5 @@ func (h *Handler) UpdateReviewById(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/vnd.api+json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(successResp)
+	return nil
 }

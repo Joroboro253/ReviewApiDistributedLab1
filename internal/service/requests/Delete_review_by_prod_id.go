@@ -14,4 +14,5 @@ func (s *ReviewService) DeleteReviewsByProductID(productID int) error {
 	}
 	_, err = s.DB.Exec(query, args...)
 	return err
+
 }

@@ -1,3 +1,5 @@
 db:
   url: postgres://postgres:bestuser@localhost:5432/reviewApi?sslmode=disable
 
+server:
+  port: ":3000"

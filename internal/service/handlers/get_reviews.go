@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
-	helpers "github.com/Joroboro253/ReviewApiDistributedLab/internal/service/heplers"
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/requests"
 	"github.com/go-chi/chi/v5"
 	"log"
@@ -15,15 +14,14 @@ type GetHandler struct {
 	Service *requests.ReviewService
 }
 
-func (h *Handler) GetReviews(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetReviews(w http.ResponseWriter, r *http.Request) *models.APIError {
 	log.Printf("It`s get reviews")
 	// Extracting product_id from URL
 	productID, err := strconv.Atoi(chi.URLParam(r, "product_id"))
 	if err != nil {
-		helpers.SendApiError(w, models.ErrInvalidInput)
-		return
+		//helpers.SendApiError(w, models.ErrInvalidInput)
+		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", "Wrong format product_id")
 	}
-	log.Printf("Product id: %v", productID)
 	// Query parameter processing
 	sortField := r.URL.Query().Get("sort")
 	pageStr := r.URL.Query().Get("page")
@@ -42,8 +40,7 @@ func (h *Handler) GetReviews(w http.ResponseWriter, r *http.Request) {
 	reviewService := requests.NewReviewService(h.DB)
 	reviews, totalReviews, totalPages, err := reviewService.GetReviewsByProductID(productID, sortField, page, limit)
 	if err != nil {
-		helpers.SendApiError(w, models.ErrDatabaseProblem)
-		return
+		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", "Wrong format product_id")
 	}
 
 	// Pagination metadata
@@ -63,4 +60,7 @@ func (h *Handler) GetReviews(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/vnd.api+json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
+	// ???
+	return nil
+
 }

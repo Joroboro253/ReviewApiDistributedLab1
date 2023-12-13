@@ -1,6 +1,9 @@
 package models
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
 
 type APIError struct {
 	Status int    `json:"status"`
@@ -8,13 +11,28 @@ type APIError struct {
 	Detail string `json:"detail"`
 }
 
+func NewAPIError(status int, title, detail string) *APIError {
+	return &APIError{
+		Status: status,
+		Title:  title,
+		Detail: detail,
+	}
+
+}
+
 func (e *APIError) Error() string {
-	return e.Title
+	return e.Title + ": " + e.Detail
+}
+
+func sendError(w http.ResponseWriter, apiErr *APIError) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(apiErr.Status)
+	json.NewEncoder(w).Encode(apiErr)
 }
 
 var (
-	ErrReviewNotFound  = &APIError{Status: http.StatusNotFound, Title: "Review Not Found", Detail: "The requested review does not exist"}
-	ErrInvalidInput    = &APIError{Status: http.StatusBadRequest, Title: "Invalid Input", Detail: "The provided input is not valid"}
-	ErrDatabaseProblem = &APIError{Status: http.StatusInternalServerError, Title: "Database Problem", Detail: "A problem occurred with the database"}
-	ErrInternal        = &APIError{Status: http.StatusInternalServerError, Title: "Internal Error", Detail: "An internal error occurred"}
+	ErrReviewNotFound  = NewAPIError(http.StatusNotFound, "Review Not Found", "The requested review does not exist")
+	ErrInvalidInput    = NewAPIError(http.StatusBadRequest, "Invalid Input", "The provided input is not valid")
+	ErrDatabaseProblem = NewAPIError(http.StatusInternalServerError, "Database Problem", "A problem occurred with the database")
+	ErrInternal        = NewAPIError(http.StatusInternalServerError, "Internal Error", "An internal error occurred")
 )

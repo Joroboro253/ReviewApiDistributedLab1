@@ -30,8 +30,12 @@ func (app *App) setupRoutes() {
 	reviewHandler := &handlers.Handler{
 		DB: app.DB,
 	}
-	app.Router.Post("/products/{product_id}/reviews", reviewHandler.CreateReview)
-	app.Router.Get("/products/{product_id}/reviews", reviewHandler.GetReviews)
-	app.Router.Delete("/products/{product_id}/reviews", reviewHandler.DeleteReviews)
-	app.Router.Patch("/products/{product_id}/reviews/{review_id}", reviewHandler.UpdateReviewById)
+	app.Router.Route("/products/{product_id}/reviews", func(r chi.Router) {
+		r.Post("/", handlers.ErrorHandler(reviewHandler.CreateReview))      // ++
+		r.Get("/", handlers.ErrorHandler(reviewHandler.GetReviews))         // --
+		r.Delete("/", handlers.ErrorHandler(reviewHandler.DeleteReviews))   // --
+		r.Patch("/", handlers.ErrorHandler(reviewHandler.UpdateReviewById)) // --
+	},
+	)
+
 }

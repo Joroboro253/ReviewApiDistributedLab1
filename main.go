@@ -21,7 +21,7 @@ func main() {
 
 	// Initialization and starting application
 	app := cli.NewApp(db)
-	err = app.Start(":3000")
+	err = app.Start(cfg.Server.Port)
 	if err != nil {
 		log.Fatalf("failed to start the server: %v", err)
 	}
