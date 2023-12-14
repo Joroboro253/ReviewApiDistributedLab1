@@ -57,20 +57,8 @@ func (h *CreateHandler) DecodeRequestBody(r *http.Request) (models.UpdateRequest
 	return reqBody, nil
 }
 
-func (h *CreateHandler) GenerateResponse(w http.ResponseWriter, review models.Review) *models.APIError {
-	respBody := models.ResponseBody{
-		Data: models.ResponseData{
-			Type:       "review",
-			ID:         review.ID,
-			Attributes: review,
-		},
-	}
-
+func (h *CreateHandler) GenerateResponse(w http.ResponseWriter) *models.APIError {
 	w.Header().Set("Content-Type", "application/vnd.api+json")
 	w.WriteHeader(http.StatusCreated)
-	if err := json.NewEncoder(w).Encode(respBody); err != nil {
-		log.Printf("Response generation error: %v", err)
-		return models.NewAPIError(http.StatusInternalServerError, "StatusInternalServerError", "Response generation error")
-	}
 	return nil
 }

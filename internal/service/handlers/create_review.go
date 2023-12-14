@@ -29,9 +29,9 @@ func (h *Handler) CreateReview(w http.ResponseWriter, r *http.Request) *models.A
 	if reqBody.Data.Type != "review" {
 		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", "Incorrect data type")
 	}
-	review, apiErr := handler.CreateReview(productId, reqBody)
+	_, apiErr = handler.CreateReview(productId, reqBody)
 	if apiErr != nil {
 		return apiErr
 	}
-	return handler.GenerateResponse(w, review)
+	return handler.GenerateResponse(w)
 }
