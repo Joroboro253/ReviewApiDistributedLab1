@@ -18,7 +18,6 @@ func (s *ReviewService) UpdateReview(productId, reviewId int, updateData models.
 		builder = builder.Set("content", *updateData.Content)
 	}
 
-	// Adding WHERE and RETURNING Conditions
 	query, args, err := builder.Where(squirrel.Eq{"id": reviewId, "product_id": productId}).
 		Suffix("RETURNING id").
 		ToSql()

@@ -8,5 +8,3 @@ import (
 type Handler struct {
 	DB *sqlx.DB
 }
-
-// Structures for JSON API compliance

@@ -15,12 +15,20 @@ type GetHandler struct {
 }
 
 func (h *Handler) GetReviews(w http.ResponseWriter, r *http.Request) *models.APIError {
-	log.Printf("It`s get reviews")
+	log.Printf("It's get reviews")
 	// Extracting product_id from URL
-	productID, err := strconv.Atoi(chi.URLParam(r, "product_id"))
+	productIDStr := chi.URLParam(r, "product_id")
+	productID, err := strconv.Atoi(productIDStr)
+
 	if err != nil {
-		//helpers.SendApiError(w, models.ErrInvalidInput)
-		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", "Wrong format product_id")
+		errorMsg := "Wrong format product_id"
+		log.Printf("%s: %v", errorMsg, err)
+		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", errorMsg)
+	}
+	if productID < 1 {
+		errorMsg := "Invalid product_id"
+		log.Printf("%s: %d", errorMsg, productID)
+		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", errorMsg)
 	}
 	// Query parameter processing
 	sortField := r.URL.Query().Get("sort")
@@ -39,8 +47,11 @@ func (h *Handler) GetReviews(w http.ResponseWriter, r *http.Request) *models.API
 
 	reviewService := requests.NewReviewService(h.DB)
 	reviews, totalReviews, totalPages, err := reviewService.GetReviewsByProductID(productID, sortField, page, limit)
+
 	if err != nil {
-		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", "Wrong format product_id")
+		errorMsg := "Error retrieving reviews"
+		log.Printf("%s: %v", errorMsg, err)
+		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", errorMsg)
 	}
 
 	// Pagination metadata
@@ -62,5 +73,4 @@ func (h *Handler) GetReviews(w http.ResponseWriter, r *http.Request) *models.API
 	json.NewEncoder(w).Encode(response)
 	// ???
 	return nil
-
 }
