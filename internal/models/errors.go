@@ -1,7 +1,6 @@
 package models
 
 import (
-	"encoding/json"
 	"net/http"
 )
 
@@ -22,12 +21,6 @@ func NewAPIError(status int, title, detail string) *APIError {
 
 func (e *APIError) Error() string {
 	return e.Title + ": " + e.Detail
-}
-
-func sendError(w http.ResponseWriter, apiErr *APIError) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(apiErr.Status)
-	json.NewEncoder(w).Encode(apiErr)
 }
 
 var (
