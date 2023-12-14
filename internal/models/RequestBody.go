@@ -1,5 +1,5 @@
 package models
 
-type RequestBody struct {
+type UpdateRequest struct {
 	Data ReviewData `json:"data"`
 }

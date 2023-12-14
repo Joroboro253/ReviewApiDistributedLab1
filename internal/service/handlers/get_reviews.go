@@ -19,6 +19,7 @@ func (h *Handler) GetReviews(w http.ResponseWriter, r *http.Request) *models.API
 	// Extracting product_id from URL
 	productIDStr := chi.URLParam(r, "product_id")
 	productID, err := strconv.Atoi(productIDStr)
+	//productID, err = helpers.GetProductIDFromURL(r, w)
 
 	if err != nil {
 		errorMsg := "Wrong format product_id"

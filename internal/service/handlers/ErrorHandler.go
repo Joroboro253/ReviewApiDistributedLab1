@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
-	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/heplers"
+	helpers "github.com/Joroboro253/ReviewApiDistributedLab/internal/service/heplers"
 	"net/http"
 )
 

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/heplers"
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/requests"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
@@ -31,7 +32,13 @@ func (h *Handler) UpdateReviewById(w http.ResponseWriter, r *http.Request) *mode
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", "Error during JSON decoding")
 	}
+	var reqBody models.UpdateRequest
+	review := reqBody.Data.Attributes
 	// Validation
+	if validationErr := helpers.ValidateReviewAttributes(&review); validationErr != nil {
+		return validationErr
+	}
+
 	updateData := req.Data.Attributes
 	validate := validator.New()
 	if err := validate.Struct(updateData); err != nil {
