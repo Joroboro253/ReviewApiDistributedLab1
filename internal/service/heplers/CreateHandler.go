@@ -4,11 +4,9 @@ import (
 	"encoding/json"
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/models"
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/requests"
-	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -34,17 +32,6 @@ func (h *CreateHandler) CreateReview(productId int, reqBody models.UpdateRequest
 	}
 	review.ID = reviewID
 	return review, nil
-}
-
-func (h *CreateHandler) GetProductIDFromURL(r *http.Request) (int, *models.APIError) {
-	productIDStr := chi.URLParam(r, "product_id")
-	productId, err := strconv.Atoi(productIDStr)
-	if err != nil {
-		errorMsg := "Wrong format product_id"
-		log.Printf("%s: %v", errorMsg, err)
-		return 0, models.NewAPIError(http.StatusBadRequest, "StatusBadRequest", errorMsg)
-	}
-	return productId, nil
 }
 
 func (h *CreateHandler) DecodeRequestBody(r *http.Request) (models.UpdateRequest, *models.APIError) {

@@ -16,7 +16,7 @@ func (h *Handler) CreateReview(w http.ResponseWriter, r *http.Request) *models.A
 	handler := helpers.CreateHandler{
 		DB: h.DB,
 	}
-	productId, apiErr := handler.GetProductIDFromURL(r)
+	productId, apiErr := helpers.GetProductIDFromURL(r)
 	if apiErr != nil {
 		return apiErr
 	}

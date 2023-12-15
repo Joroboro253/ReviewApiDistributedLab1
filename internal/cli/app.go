@@ -2,6 +2,7 @@ package cli
 
 import (
 	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/handlers"
+	"github.com/Joroboro253/ReviewApiDistributedLab/internal/service/heplers"
 	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
 	"net/http"
@@ -31,10 +32,10 @@ func (app *App) setupRoutes() {
 		DB: app.DB,
 	}
 	app.Router.Route("/products/{product_id}/reviews", func(r chi.Router) {
-		r.Post("/", handlers.ErrorHandler(reviewHandler.CreateReview))
-		r.Get("/", handlers.ErrorHandler(reviewHandler.GetReviews))
-		r.Delete("/", handlers.ErrorHandler(reviewHandler.DeleteReviews))
-		r.Patch("/{review_id}", handlers.ErrorHandler(reviewHandler.UpdateReviewById))
+		r.Post("/", helpers.ErrorHandler(reviewHandler.CreateReview))
+		r.Get("/", helpers.ErrorHandler(reviewHandler.GetReviews))
+		r.Delete("/", helpers.ErrorHandler(reviewHandler.DeleteReviews))
+		r.Patch("/{review_id}", helpers.ErrorHandler(reviewHandler.UpdateReviewById))
 	},
 	)
 
